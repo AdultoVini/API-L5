@@ -11,8 +11,16 @@ class ClienteController extends BaseController
     public function index()
     {
 
+         //Coleto todos os dados enviados via query stringe serão usados para filtrar os registros.
+         $arrFiltros = [
+            'nome' => $this->request->getGet('nome'),
+            'razao_social' => $this->request->getGet('razao_social'),
+            'pagina' => $this->request->getGet('pagina'),
+            'porPagina' => $this->request->getGet('porPagina')
+        ];
+
         $clientes = new ClientesModel();
-        $clientes = $clientes->findAll();
+        $clientes = $clientes->GetClientes($arrFiltros);
      
         if(empty($clientes)){
 
@@ -29,6 +37,7 @@ class ClienteController extends BaseController
                 "status" => 200,
                 "mensagem" => "Consulta realizada com sucesso!"
             ],
+            "total registros" => Count($clientes),
             "retorno" => $clientes
         ]);
     }

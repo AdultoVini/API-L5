@@ -10,8 +10,16 @@ class ProdutoController extends BaseController
 {
     public function index()
     {
+
+        //Coleto todos os dados enviados via query stringe serão usados para filtrar os registros.
+        $arrFiltros = [
+            'nome' => $this->request->getGet('nome'),
+            'pagina' => $this->request->getGet('pagina'),
+            'porPagina' => $this->request->getGet('porPagina')
+        ];
+
         $produtos = new ProdutosModel();
-        $produtos = $produtos->findAll();
+        $produtos = $produtos->GetProdutos($arrFiltros);
 
         if(empty($produtos)){
 
@@ -28,6 +36,7 @@ class ProdutoController extends BaseController
                 "status" => 200,
                 "mensagem" => "Consulta realizada com sucesso!"
             ],
+            "total registros" => Count($produtos),
             "retorno" => $produtos
         ]);
     }
