@@ -1,68 +1,73 @@
-# CodeIgniter 4 Application Starter
+Prova Técnica
+Detalhes de instalação
+Ao baixar o arquivo, acesse o local do projeto no terminal e use comando abaixo:
+composer install (Para instalar todas as dependências)
+É necessário criar o banco de dados manualmente para que as tabelas sejam geradas pelas migrations já configuradas. Após a criação do banco, é importante configurar o arquivo .env ou o Database.php com as informações de conexão do banco de dados. Por fim, basta executar o comando abaixo para que as tabelas sejam criadas automaticamente.
+Php spark migrate
+E por fim, para iniciar o projeto, usar o comando:
+Php spark serve
+A url base do projeto é localhost:8080
 
-## What is CodeIgniter?
+Detalhes sobre o banco de dados
+No campo status da tabela pedidos_compra, os seguintes valores numéricos representam os respectivos status do pedido:
+    0 = Cancelado
+    1 = Em aberto
+    2 = Pago
+Os campos id_cliente e id_produto na tabela pedidos_compra correspondem aos IDs das tabelas clientes e produtos, respectivamente.
+Itens implementados
+Desafio 1 completo, endpoints de clientes, produtos e pedidos de compra, todos com CRUD completo;
+Desafio 2, foram implementados paginação e filtros nos endpoints de listagem /pedidos, /clientes e /produtos para os seguintes campos:
+Clientes: nome e razão_social;
+Produtos: nome;
+Pedidos: nome (nome do cliente associado ao pedido) e status.
+A paginação é controlada por dois parâmetros:
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+•	pagina: indica a página atual.
+•	porPagina: define a quantidade de registros por página.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Todos os filtros e parâmetros de paginação são passados via query string na URL. Exemplo de requisição:
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+Clientes
+Para cadastro do cliente via POST ou atualização do mesmo via PUT, o único campo obrigatório é o nome. No caso de atualizar o cadastro, não é obrigatório atualizar o nome junto, mas não é permitido anular o mesmo, veja os campos abaixo:
+{
+	“parametros”: {
+		“nome”: “Vinicius”,
+		“cpf”: “55500088877”,
+		“razão_social”: “L5 networks”,
+		“cnpj”: “12345678912345”
+}
+}	
+(GET) | /clientes => Retorna todos os clientes cadastrados.
+(GET) | /clientes/1 => Retorna os dados do cliente.
+(POST) | /clientes => Cadastra os dados de um cliente.
+(PUT) | /clientes/1 => Atualiza os dados de um cliente.
+(DELETE) | /clientes/1 => Deleta os dados de um cliente.
+Produtos
+Para cadastro do produto, o único campo obrigatório é o nome. O campo pode ser adicionado da seguinte forma:
+{
+	“parametros”: {
+		“nome”: “Vinicius”
+}
+}	
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+(GET) | /produtos => Retorna todos os produtos cadastrados.
+(GET) | /produtos/1 => Retorna os dados do produto.
+(POST) | /produtos => Cadastra os dados de um produto.
+(PUT) | /produtos/1 => Atualiza os dados de um produto.
+(DELETE) | /produtos/1 => Deleta os dados de um produto.
+Pedidos de Compra
+Para cadastro do pedido de compra, o campos obrigatórios são os ids do cliente e produto, e precisam existir em suas respectivas tabelas. o status pode ser informado, mas caso não seja, o padrão será 1 => Em aberto, e no final fica assim:
+{
+	“parametros”: {
+		“id_cliente”: 1,
+		“id_produto”: 4,
+		“status”: 2
+}
+}
+(GET) | /pedidos => Retorna todos os pedidos de compra cadastrados.
+(GET) | /pedidos/1 => Retorna os dados de um pedido.
+(POST) | /pedidos => Cadastra um novo pedido.
+(PUT) | /pedidos/1 => Atualiza os dados de um pedido.
+(DELETE) | /pedidos/1 => Deleta os dados de um pedido.
 
-## Installation & updates
-
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
-
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
-
-## Setup
-
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
-
-## Important Change with index.php
-
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
-
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Server Requirements
-
-PHP version 8.1 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+Lembrando que esses parâmetros servem tanto para POST quanto para PUT.
