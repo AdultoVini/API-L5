@@ -32,7 +32,7 @@ Para cadastro do cliente via POST ou atualização do mesmo via PUT, o único ca
 {
 	“parametros”: {
 		“nome”: “Vinicius”,
-		“cpf”: “55500088877”,
+		“cpf”: “55500088866”,
 		“razão_social”: “L5 networks”,
 		“cnpj”: “12345678912345”
 }
